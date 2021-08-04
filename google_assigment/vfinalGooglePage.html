@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Google</title>
+    <style>
+      .container {
+        display: block;
+        justify-content: space-between;
+        padding-left: 1%;
+        padding-right: 4%;
+        border: solid 1px black;
+        height: 100px;
+      }
+      .logo {
+        display: block;
+        float: left;
+        width: 100px;
+        padding: 1%;
+      }
+
+      img {
+        display: inline-block;
+        width: 100%;
+      }
+
+      input {
+        display: inline-block;
+        width: 10%;
+      }
+
+      .search {
+        display: block;
+        float: left;
+        width: 600px;
+        height: 50px;
+
+        margin-left: 20px;
+        margin-bottom: 100px;
+        padding: 2%;
+      }
+
+      #query {
+        display: inline-block;
+        width: 550px;
+        height: 30px;
+      }
+      .btn {
+        display: inline-block;
+        height: 34px;
+        margin-top: 1%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="logo">
+        <img
+          src="https://cdn.vox-cdn.com/thumbor/Pkmq1nm3skO0-j693JTMd7RL0Zk=/0x0:2012x1341/1200x800/filters:focal(0x0:2012x1341)/cdn.vox-cdn.com/uploads/chorus_image/image/47070706/google2.0.0.jpg"
+        />
+      </div>
+      <div class="search">
+        <input placeholder="&nbsp;&nbsp;Search" type="text" id="query" />
+        <button class="btn" onclick="makeRequest()">&#128269;</button>
+      </div>
+    </div>
+    <div id="videos"></div>
+  </body>
+</html>
+
+<script>
+    
+  let videos_div = document.getElementById("videos");
+  async function makeRequest() {
+      console.log("buttom working")
+    let q = document.getElementById("query").value;
+    try {
+      let res = await fetch(
+        `http://api.serpstack.com/search?access_key=36499db4358989b2d60a6981b2cedb82&query= ${q}`
+      );
+      let data = await res.json();
+        console.log(data);
+      //   console.log(data.organic_results);
+      appendMovies(data.organic_results);
+      //   return data.organic_results;
+    } catch (err) {
+      console.log("err", err);
+    }
+  }
+
+  function appendMovies(d) {
+    videos_div.innerHTML = null;
+    d.forEach(({ url, title }) => {
+      console.log(url);
+      let div = document.createElement("div");
+
+      let p = document.createElement("p");
+      p.setAttribute("id", "domainID");
+
+      p.innerHTML = url;
+      p.addEventListener("click", () => {
+        window.location.assign("www.javascript.com");
+      });
+
+      let p_birth = document.createElement("p");
+      p_birth.innerText = title;
+      p_birth.addEventListener("click", () => {
+        window.location.assign("www.javascript.com");
+      });
+
+      div.append(p, p_birth);
+
+      videos_div.append(div);
+    });
+  }
+
+  //   async function main() {
+  //     let movies = await makeRequest();
+  //     console.log(movies);
+  //     // appendMovies(movies);
+  //   }
+</script>
